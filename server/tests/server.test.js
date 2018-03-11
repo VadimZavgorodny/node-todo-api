@@ -7,7 +7,9 @@ const {Todo} = require('./../models/todo');
 
 const todos = [{
     _id: new ObjectID(),
-    text: 'First test todo'
+    text: 'First test todo',
+    completed: true,
+    completedAt: 333
 }, {
     _id: new ObjectID(),
     text: 'Second test todo'
@@ -112,7 +114,7 @@ describe('POST /todos', () => {
     describe('DELETE /todo/:id', () => {
         it('should remove to do', (done) => {
             var hexId = todos[1]._id.toHexString();
-            console.log(hexId);
+
             request(app)
                 .delete(`/todos/${hexId}`)
                 .expect(200)
@@ -148,6 +150,45 @@ describe('POST /todos', () => {
                 .delete(`/todos/1234`)
                 .expect(404)
                 .end(done);
+        });
+    });
+
+    describe('PATCH /todo/:id', () => {
+        it('should update todo', (done) => {
+            var todoId = todos[0]._id.toHexString();
+            var text = 'This is form postman Vadim';
+
+            request(app)
+                .patch(`/todos/${todoId}`)
+                .send({
+                    "text": "This is form postman Vadim",
+                    "completed": true
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body.todo.text).toBe(text);
+                    expect(res.body.todo.completed).toBe(true);
+                    expect(typeof res.body.todo.completedAt).toBe('number');
+                }).end(done);
+
+        });
+
+        it('should clear completed when todo is not completed', (done) => {
+            var todoId = todos[1]._id.toHexString();
+            var text = 'This is form postman Vadim';
+
+            request(app)
+                .patch(`/todos/${todoId}`)
+                .send({
+                    "text": text,
+                    "completed": false
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body.todo.text).toBe(text);
+                    expect(res.body.todo.completed).toBe(false);
+                    expect(res.body.todo.completedAt).toBeNull();
+                }).end(done);
         });
     });
 });
