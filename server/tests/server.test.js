@@ -231,7 +231,7 @@ describe('POST /todos', () => {
 
         });
 
-        it('should return valiedation errors if request invalid', (done) => {
+        it('should return validation errors if request invalid', (done) => {
             var email = 'test@test.com';
 
             request(app)
