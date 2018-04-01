@@ -140,10 +140,6 @@ app.post('/users/login', (req, res) => {
     }).catch((e) => {
         res.status(400).send();
     });
-
-    //res.send(body);
-    //User.findOne({email:body.email, password})
-
 });
 
 app.listen(port, () => {
