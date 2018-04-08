@@ -5,11 +5,11 @@ var data = {
     id: 10
 };
 
-var token = jwt.sign(data, '123abc');
+var token = jwt.sign(data, process.env.JWT_SECRET);
 
 console.log(JSON.stringify(token, undefined, 2));
 
-var decoded = jwt.verify(token, '123abc');
+var decoded = jwt.verify(token, process.env.JWT_SECRET);
 console.log(JSON.stringify(decoded, undefined, 2));
 
 //
